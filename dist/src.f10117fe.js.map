@@ -1,0 +1,1 @@
+{"version":3,"sources":["src/index.ts"],"names":[],"mappings":"AAAA,QAAQ,CAAC,cAAT,CAAwB,KAAxB,EAA+B,SAA/B,GAA2C,2DAA3C","file":"src.f10117fe.js","sourceRoot":"..","sourcesContent":["document.getElementById('app').innerHTML = `\n<h1>Ronald Paredes</h1>\n<div>\n  Hello World\n</div>\n`;\n"]}
