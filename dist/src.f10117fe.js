@@ -117,9 +117,372 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"src/index.ts":[function(require,module,exports) {
-document.getElementById('app').innerHTML = "\n<h1>Ronald Paredes</h1>\n<div>\n  Hello World\n</div>\n";
-},{}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+})({"src/scripts/util.ts":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+/**
+ * Utility function to generate random integers between
+ * @param min value include
+ * @param max value included
+ */
+
+function randomBetween(min, max) {
+  return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
+exports.randomBetween = randomBetween;
+/**
+ * Utility function to generate random floats between
+ * @param min value include
+ * @param max value included
+ */
+
+function randomFloatBetween(min, max) {
+  return Math.random() * (max - min + 1) + min;
+}
+
+exports.randomFloatBetween = randomFloatBetween;
+},{}],"src/index.ts":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var util_1 = require("./scripts/util");
+
+if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+  console.log(true);
+} else {
+  console.log(false);
+} //* Hamburger functionality
+
+
+var button = document.querySelector(".ham-container");
+var linkWrap = document.querySelector(".link-wrap");
+
+function toggleMenu() {
+  button.classList.toggle("is-open");
+  linkWrap.classList.toggle("is-visible");
+}
+
+button.addEventListener("click", toggleMenu); //* Navigation positioning
+
+var nav = document.getElementsByTagName("nav")[0];
+var navTopPos = document.querySelector(".home-wrap").offsetHeight - 53;
+var lastPos = 0;
+var isFixed = false;
+/**
+ * Closes mobile hamburger menu if window size increases
+ * to desktop size and hamburger menu was left open
+ */
+
+var hamCont = document.querySelector(".ham-container");
+window.addEventListener("resize", function () {
+  var winWidth = window.innerWidth;
+
+  if (winWidth >= 600 && hamCont.classList.contains("is-open")) {
+    hamCont.classList.remove("is-open");
+    linkWrap.classList.remove("is-visible");
+  }
+});
+window.addEventListener("scroll", function () {
+  var winYPos = window.scrollY;
+
+  if (winYPos >= navTopPos && lastPos < winYPos && !isFixed) {
+    nav.classList.add("fixed");
+    isFixed = true;
+  }
+
+  if (winYPos <= navTopPos && lastPos > winYPos && isFixed) {
+    nav.classList.remove("fixed");
+    isFixed = false;
+  }
+
+  lastPos = winYPos;
+
+  if (winYPos >= navTopPos / 2 && scrollBtn.style.opacity == 0) {
+    scrollBtn.style.cssText = "opacity: 0.8";
+    scrollBtn.style.visibility = "visible";
+    setCanvasAnim(false);
+  }
+
+  if (winYPos < navTopPos / 2 && scrollBtn.style.opacity == 0.8) {
+    scrollBtn.style.cssText = "opacity: 0";
+    scrollBtn.style.visibility = "hidden";
+    setCanvasAnim(true);
+  }
+});
+
+window.onresize = function () {
+  navTopPos = document.querySelector(".home-wrap").offsetHeight - 53; // Adjust Canvas size
+
+  canvas.width = canvas.parentNode.offsetWidth * dpi;
+  canvas.height = canvas.parentNode.offsetHeight * dpi;
+  drawCanvas();
+  updatePointsPos();
+};
+/**
+ * Scroll button functionality
+ */
+
+
+var scrollBtn = document.querySelector(".scroll-button");
+scrollBtn.addEventListener("click", function () {
+  return scrollToTop(0, 50);
+});
+
+function scrollToTop(to, duration) {
+  if (duration < 0) {
+    return;
+  }
+
+  var difference = to - window.scrollY;
+  var perTick = difference / duration * 2;
+  setTimeout(function () {
+    window.scrollTo(0, window.scrollY + perTick);
+    scrollToTop(to, duration - 2);
+  }, 10);
+}
+/** Header Canvas Background animation */
+
+
+var canvas = document.getElementById("animation-canvas");
+var ctx = canvas.getContext("2d");
+var dpi = window.devicePixelRatio;
+canvas.width = canvas.parentNode.offsetWidth * dpi;
+canvas.height = canvas.parentNode.offsetHeight * dpi;
+var points = [];
+var canvasOrig = {
+  w: canvas.width,
+  h: canvas.height
+};
+var colorSelect = ["#ee79b6", "#9d3e60", "#e6627d"];
+var isPlaying = true;
+var isAnimLoopPaused = false;
+
+function setCanvasAnim(value) {
+  isPlaying = value;
+
+  if (isPlaying) {
+    isAnimLoopPaused = false;
+    startPointAnim();
+  } else {
+    isAnimLoopPaused = true;
+    pausePointAnim();
+  }
+}
+/**
+ * Initializes the properties of each Point
+ * Then calls itself
+ */
+
+
+(function setPoints() {
+  var maxPoint = 13;
+
+  for (var i = 0; i < maxPoint; i++) {
+    var x = i * (canvas.width / maxPoint) + canvas.width * 0.05;
+
+    for (var j = 0; j < maxPoint; j++) {
+      var y = j * ((canvas.height - 50) / maxPoint) + canvas.height * 0.05;
+      points.push({
+        x: x,
+        y: y,
+        origX: x,
+        origY: y,
+        size: util_1.randomBetween(2, 5),
+        color: "rgba(255, 255, 255, 1)"
+      });
+    }
+  }
+})();
+
+function getDistance(pointA, pointB) {
+  return Math.sqrt(Math.pow(pointB.x - pointA.x, 2) + Math.pow(pointB.y - pointA.y, 2));
+}
+/** Redraws the Canvas
+ * @param ctx takes a Context
+ */
+
+
+function drawCanvas() {
+  ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+  points.forEach(function (point) {
+    drawLines(point);
+    drawCircle(point);
+  });
+}
+/**
+ * Draws a Circle with given params
+ * @param point to be drawn on the screen
+ */
+
+
+function drawCircle(point) {
+  ctx.beginPath();
+  ctx.arc(point.x, point.y, point.size, 0, 2 * Math.PI, false);
+  ctx.fillStyle = "rgba(255, 255, 255,\n    " + point.y / 1.1 / canvas.height + " )"; //Opacity based on height
+
+  ctx.fill();
+}
+/**
+ * Moves the animation one 'tick' or 'step'
+ */
+
+
+function step() {
+  !isAnimLoopPaused && drawCanvas();
+  window.requestAnimationFrame(step);
+}
+
+window.requestAnimationFrame(step);
+
+function startPointAnim() {
+  points.forEach(function (point) {
+    updatePoint(point);
+  });
+}
+
+startPointAnim();
+
+function pausePointAnim() {
+  points.forEach(function (point) {
+    point.anim.pause();
+  });
+}
+
+function drawLines(point) {
+  points.forEach(function (nextPoint) {
+    var distance = getDistance(point, nextPoint);
+    var val = 8;
+    var maxDist = canvas.width / val > canvas.height / val ? canvas.width / val : canvas.height / val;
+
+    if (point != nextPoint && distance < maxDist) {
+      ctx.beginPath();
+      ctx.moveTo(point.x, point.y);
+      ctx.lineTo(nextPoint.x, nextPoint.y);
+      ctx.lineWidth = 1.5;
+      ctx.strokeStyle = "rgba(255, 255, 255," + (maxDist - distance) / (maxDist * 3) * (point.y / 1.1 / canvas.height) + ")"; // To Set opacity based on Height
+
+      ctx.stroke();
+    }
+  });
+}
+/**
+ * Animates a point to random canvas locations
+ * @param point whose properties will be animated
+ */
+
+
+function updatePoint(point) {
+  var val = 15;
+  var change = canvas.width / val > canvas.height / val ? canvas.width / val : canvas.height / val;
+  point.anim = gsap.to(point, util_1.randomFloatBetween(1, 2), {
+    x: util_1.randomBetween(point.origX - change, point.origX + change),
+    y: util_1.randomBetween(point.origY - change, point.origY + change),
+    size: util_1.randomBetween(2, 5),
+    ease: "power1.inOut",
+    onComplete: function onComplete() {
+      updatePoint(point);
+    }
+  });
+}
+/**
+ * Updates position (evely distributed) of points based on new Canvas size.
+ */
+
+
+function updatePointsPos() {
+  points.forEach(function (point) {
+    point.origX = point.origX * (canvas.width / canvasOrig.w), point.origY = point.origY * (canvas.height / canvasOrig.h);
+  });
+  canvasOrig.w = canvas.width;
+  canvasOrig.h = canvas.height;
+}
+/**
+ * Access button functionality
+ */
+
+
+var accButton = document.querySelector(".access-button");
+accButton.addEventListener("click", function () {
+  setCanvasAnim(false);
+  scrollToSection(document.querySelector(".about-wrap"), 53, 1, false);
+});
+
+function scrollToSection(section, offsetY, duration, shouldToggleMenu) {
+  gsap.to(window, {
+    duration: duration,
+    scrollTo: {
+      y: section,
+      offsetY: offsetY,
+      ease: "power3.inOut"
+    },
+    onComplete: shouldToggleMenuFunc(shouldToggleMenu)
+  });
+}
+
+function shouldToggleMenuFunc(shouldToggleMenu) {
+  if (shouldToggleMenu && document.querySelector(".ham-container").classList.contains("is-open")) {
+    toggleMenu();
+  }
+}
+/**
+ * Nav To Section Functionality
+ */
+
+
+var navLinks = document.querySelector(".link-wrap");
+navLinks.childNodes.forEach(function (link) {
+  var linkName = link.textContent.toLowerCase();
+  var offsetY = linkName == "about" ? 53 : 0;
+  link.addEventListener("click", function () {
+    return scrollToSection(document.querySelector("." + linkName + "-wrap"), offsetY, 1, true);
+  });
+});
+/**
+ * Nav Items Hightlighting functionality
+ */
+
+var sections = document.querySelectorAll("section");
+var sectWaypointsDown = [];
+var sectWaypointsUp = [];
+var linkArr = Array.from(navLinks.children);
+sections.forEach(function (section) {
+  var sectStr = section.classList.item(0).substring(0, section.classList.item(0).length - 5);
+  sectWaypointsDown.push(new Waypoint({
+    element: section,
+    handler: function handler(direction) {
+      if (direction == "down") {
+        linkArr.forEach(function (link) {
+          link.classList.remove("link--selected");
+        });
+        document.querySelector(".link--" + sectStr).classList.add("link--selected");
+      }
+    },
+    offset: "60%"
+  }));
+});
+sections.forEach(function (section) {
+  var sectStr = section.classList.item(0).substring(0, section.classList.item(0).length - 5);
+  sectWaypointsUp.push(new Waypoint({
+    element: section,
+    handler: function handler(direction) {
+      if (direction == "up") {
+        linkArr.forEach(function (link) {
+          link.classList.remove("link--selected");
+        });
+        document.querySelector(".link--" + sectStr).classList.add("link--selected");
+      }
+    },
+    offset: "-40%"
+  }));
+});
+},{"./scripts/util":"src/scripts/util.ts"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -147,7 +510,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51842" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "57810" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

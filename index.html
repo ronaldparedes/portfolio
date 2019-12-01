@@ -1,12 +1,129 @@
 <html>
   <head>
     <title>My Website</title>
-    <meta charset="UTF-8" />
+    <meta
+      charset="UTF-8"
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1 user-scalable=no"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Montserrat:300, 500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./src/styles/style.sass" />
   </head>
 
   <body>
-    <div id="app"></div>
-    <footer>©2019</footer>
+    <section class="home-wrap flex">
+      <canvas id="animation-canvas"></canvas>
+      <div class="text-container">
+        <div class="text">
+          Hello, I'm <span class="highlight">Ronald Paredes</span>
+          <br />
+          I'm a front-end web developer
+        </div>
+      </div>
+      <div class="access-button">
+        <svg
+          fill="none"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+        >
+          <path class="second" d="M18 11l-6-6-6 6" />
+          <path class=" first" d="M18 19l-6-6-6 6" />
+        </svg>
+      </div>
+      <nav class="flex">
+        <div class="link-wrap">
+          <div class="link link--home">Home</div>
+          <div class="link link--about">About</div>
+          <div class="link link--portfolio">Portfolio</div>
+          <div class="link link--blog">Blog</div>
+          <div class="link link--contact">Contact</div>
+        </div>
+        <div class="ham-container">
+          <div class="ham"></div>
+        </div>
+      </nav>
+    </section>
+    <section class="about-wrap flex">
+      <h2>About</h2>
+      <p>
+        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Accusamus a,
+        exercitationem voluptate deserunt dolore ex facilis commodi facere quam
+        consequuntur tenetur earum odit optio ea laboriosam. Cum commodi
+        distinctio voluptates!
+      </p>
+      <p>
+        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Accusamus a,
+        exercitationem voluptate deserunt dolore ex facilis commodi facere quam
+        consequuntur tenetur earum odit optio ea laboriosam. Cum commodi
+        distinctio voluptates!
+      </p>
+    </section>
+    <section class="portfolio-wrap flex">
+      <h2>Portfolio</h2>
+      <p>
+        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Accusamus a,
+        exercitationem voluptate deserunt dolore ex facilis commodi facere quam
+        consequuntur tenetur earum odit optio ea laboriosam. Cum commodi
+        distinctio voluptates!
+      </p>
+      <p>
+        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Accusamus a,
+        exercitationem voluptate deserunt dolore ex facilis commodi facere quam
+        consequuntur tenetur earum odit optio ea laboriosam. Cum commodi
+        distinctio voluptates!
+      </p>
+    </section>
+    <section class="blog-wrap flex">
+      <h2>Blog</h2>
+      <p>
+        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Accusamus a,
+        exercitationem voluptate deserunt dolore ex facilis commodi facere quam
+        consequuntur tenetur earum odit optio ea laboriosam. Cum commodi
+        distinctio voluptates!
+      </p>
+      <p>
+        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Accusamus a,
+        exercitationem voluptate deserunt dolore ex facilis commodi facere quam
+        consequuntur tenetur earum odit optio ea laboriosam. Cum commodi
+        distinctio voluptates!
+      </p>
+    </section>
+    <section class="contact-wrap flex">
+      <h2>Contact</h2>
+      <p>
+        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Accusamus a,
+        exercitationem voluptate deserunt dolore ex facilis commodi facere quam
+        consequuntur tenetur earum odit optio ea laboriosam. Cum commodi
+        distinctio voluptates!
+      </p>
+      <p>
+        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Accusamus a,
+        exercitationem voluptate deserunt dolore ex facilis commodi facere quam
+        consequuntur tenetur earum odit optio ea laboriosam. Cum commodi
+        distinctio voluptates!
+      </p>
+    </section>
+    <div class="scroll-button">
+      <svg
+        fill="none"
+        stroke="#000"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        viewBox="0 0 24 24"
+      >
+        <path d="M18 15l-6-6-6 6" />
+      </svg>
+    </div>
+    <footer>Ronald Paredes <span class="highlight"> ©2019</span></footer>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.0.1/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.0.1/ScrollToPlugin.min.js"></script>
+    <script src="src/scripts/noframework.waypoints.min.js"></script>
     <script src="src/index.ts"></script>
   </body>
 </html>
