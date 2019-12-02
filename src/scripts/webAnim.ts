@@ -1,69 +1,5 @@
 import { randomBetween, randomFloatBetween } from "./util";
 
-/** Header Canvas Background animation */
-const canvas: HTMLCanvasElement = <any>(
-  document.getElementById("animation-canvas")
-);
-const ctx = canvas.getContext("2d");
-const dpi = window.devicePixelRatio;
-canvas.width = canvas.parentNode.offsetWidth * dpi;
-canvas.height = canvas.parentNode.offsetHeight * dpi;
-
-const points: Point[] = [];
-const canvasOrig = { w: canvas.width, h: canvas.height };
-const colorSelect: String[] = ["#ee79b6", "#9d3e60", "#e6627d"];
-
-let isPlaying = true;
-let isAnimLoopPaused = false;
-function setCanvasAnim(value: boolean) {
-  isPlaying = value;
-  if (isPlaying) {
-    isAnimLoopPaused = false;
-    startPointAnim();
-  } else {
-    isAnimLoopPaused = true;
-    pausePointAnim();
-  }
-}
-/**
- * Initializes the properties of each Point
- * Then calls itself
- */
-(function setPoints() {
-  const maxPoint = 13;
-  for (let i = 0; i < maxPoint; i++) {
-    let x = i * (canvas.width / maxPoint) + canvas.width * 0.05;
-    for (let j = 0; j < maxPoint; j++) {
-      let y = j * ((canvas.height - 50) / maxPoint) + canvas.height * 0.05;
-      points.push({
-        x: x,
-        y: y,
-        origX: x,
-        origY: y,
-        size: randomBetween(2, 5),
-        color: `rgba(255, 255, 255, 1)`
-      });
-    }
-  }
-})();
-
-function getDistance(pointA: Point, pointB: Point) {
-  return Math.sqrt(
-    Math.pow(pointB.x - pointA.x, 2) + Math.pow(pointB.y - pointA.y, 2)
-  );
-}
-
-/** Redraws the Canvas
- * @param ctx takes a Context
- */
-function drawCanvas() {
-  ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-  points.forEach(point => {
-    drawLines(point);
-    drawCircle(point);
-  });
-}
-
 interface Point {
   x: number;
   y: number;
@@ -71,92 +7,165 @@ interface Point {
   origY: number;
   size: number;
   color: string;
+  anim: any;
 }
-/**
- * Draws a Circle with given params
- * @param point to be drawn on the screen
- */
-function drawCircle(point: Point) {
-  ctx.beginPath();
-  ctx.arc(point.x, point.y, point.size, 0, 2 * Math.PI, false);
-  ctx.fillStyle = `rgba(255, 255, 255,
-    ${point.y / 1.1 / canvas.height} )`; //Opacity based on height
-  ctx.fill();
-}
+/** Header Canvas Background animation */
 
-/**
- * Moves the animation one 'tick' or 'step'
- */
-function step() {
-  !isAnimLoopPaused && drawCanvas();
-  window.requestAnimationFrame(step);
-}
-window.requestAnimationFrame(step);
+export default class WebAnim {
+  canvas = <HTMLCanvasElement>document.getElementById("animation-canvas");
+  ctx = this.canvas.getContext("2d");
+  dpi = window.devicePixelRatio;
+  points: Point[] = [];
+  isPlaying = true;
+  isAnimLoopPaused = false;
+  canvasOrig;
+  constructor() {
+    this.canvas.width =
+      (<HTMLElement>this.canvas.parentNode).offsetWidth * this.dpi;
+    this.canvas.height =
+      (<HTMLElement>this.canvas.parentNode).offsetHeight * this.dpi;
+    this.setPoints(13);
+    this.canvasOrig = { w: this.canvas.width, h: this.canvas.height };
+  }
 
-function startPointAnim() {
-  points.forEach(point => {
-    updatePoint(point);
-  });
-}
-startPointAnim();
-
-function pausePointAnim() {
-  points.forEach(point => {
-    point.anim.pause();
-  });
-}
-
-function drawLines(point: Point) {
-  points.forEach(nextPoint => {
-    let distance = getDistance(point, nextPoint);
-    let val = 8;
-    let maxDist =
-      canvas.width / val > canvas.height / val
-        ? canvas.width / val
-        : canvas.height / val;
-    if (point != nextPoint && distance < maxDist) {
-      ctx.beginPath();
-      ctx.moveTo(point.x, point.y);
-      ctx.lineTo(nextPoint.x, nextPoint.y);
-      ctx.lineWidth = 1.5;
-      ctx.strokeStyle = `rgba(255, 255, 255,${((maxDist - distance) /
-        (maxDist * 3)) *
-        (point.y / 1.1 / canvas.height)})`; // To Set opacity based on Height
-      ctx.stroke();
+  /** Initializes the properties of each Point */
+  private setPoints(maxPoint: number) {
+    for (let i = 0; i < maxPoint; i++) {
+      let x = i * (this.canvas.width / maxPoint) + this.canvas.width * 0.05;
+      for (let j = 0; j < maxPoint * 0.75; j++) {
+        let y =
+          j * (((this.canvas.height - 53) / (maxPoint * 0.75)) * 0.9) +
+          this.canvas.height * 0.1;
+        this.points.push({
+          x: x,
+          y: y,
+          origX: x,
+          origY: y,
+          size: randomBetween(2, 5),
+          color: `rgba(255, 255, 255, 1)`,
+          anim: null
+        });
+      }
     }
-  });
-}
+  }
+  private getDistance(pointA: Point, pointB: Point) {
+    return Math.sqrt(
+      Math.pow(pointB.x - pointA.x, 2) + Math.pow(pointB.y - pointA.y, 2)
+    );
+  }
+  /** Draws a Circle with given params
+   * @param point to be drawn on the canvas
+   */
+  private drawCircle(point: Point) {
+    const pointOpacity =
+      (point.y - this.canvas.height * 0.1) / this.canvas.height; //Opacity based on Y position
+    this.ctx.beginPath();
+    this.ctx.arc(point.x, point.y, point.size, 0, 2 * Math.PI, false);
+    this.ctx.fillStyle = `rgba(255, 255, 255,
+    ${pointOpacity} )`;
+    this.ctx.fill();
+  }
 
-/**
- * Animates a point to random canvas locations
- * @param point whose properties will be animated
- */
-function updatePoint(point: Point) {
-  const val = 15;
-  const change: number =
-    canvas.width / val > canvas.height / val
-      ? canvas.width / val
-      : canvas.height / val;
+  /** Draws a connecting linte between a Point and the points
+   * that are at least at a specified distance away
+   * @param point to draw lines from
+   * @param distVal variable num to affect number of connections
+   */
+  private drawLines(point: Point, distVal: number, lineWidth: number) {
+    this.points.forEach(nextPoint => {
+      const distance = this.getDistance(point, nextPoint);
+      // MaxDist based on canvas aspect ratio
+      const widthVal = this.canvas.width / distVal;
+      const heightVal = this.canvas.height / distVal;
+      const maxDist: number = widthVal > heightVal ? widthVal : heightVal;
+      // Draws lines to points closer that maxDist
+      if (point != nextPoint && distance < maxDist) {
+        this.ctx.beginPath();
+        this.ctx.moveTo(point.x, point.y);
+        this.ctx.lineTo(nextPoint.x, nextPoint.y);
+        this.ctx.lineWidth = lineWidth;
+        this.ctx.strokeStyle = `rgba(255, 255, 255,${((maxDist - distance) /
+          (maxDist * 3)) *
+          ((point.y + this.canvas.height * 0.1) / this.canvas.height)})`; // To Set opacity based on Height
+        this.ctx.stroke();
+      }
+    });
+  }
 
-  point.anim = gsap.to(point, randomFloatBetween(1, 2), {
-    x: randomBetween(point.origX - change, point.origX + change),
-    y: randomBetween(point.origY - change, point.origY + change),
-    size: randomBetween(2, 5),
-    ease: "power1.inOut",
-    onComplete: () => {
-      updatePoint(point);
+  /** Draws the Canvas*/
+  drawCanvas() {
+    let lineWidth = this.canvas.width > 1200 ? 3 : 1.5;
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.points.forEach(point => {
+      this.drawLines(point, 8, lineWidth);
+      this.drawCircle(point);
+    });
+  }
+
+  /**Animates a point to random canvas locations
+   * @param point whose properties will be animated
+   * @param changeVal number that sets the range of point movement
+   */
+  private updatePoint(point: Point, changeVal: number) {
+    // Range of point movement based on canvas aspect ratio
+    const widthVal = this.canvas.width / changeVal;
+    const heightVal = this.canvas.height / changeVal;
+    const change: number = widthVal > heightVal ? widthVal : heightVal;
+
+    point.anim = gsap.to(point, randomFloatBetween(1, 2), {
+      x: randomBetween(point.origX - change, point.origX + change),
+      y: randomBetween(point.origY - change, point.origY + change),
+      // size: randomBetween(2, 5),
+      ease: "power1.inOut",
+      onComplete: () => {
+        this.updatePoint(point, changeVal);
+      }
+    });
+  }
+
+  /** Moves the animation one 'tick' or 'step' */
+  public step() {
+    !this.isAnimLoopPaused && this.drawCanvas();
+  }
+
+  /** Resumes the Points animation cycle*/
+  public startPointAnim() {
+    this.points.forEach(point => {
+      this.updatePoint(point, 15);
+    });
+  }
+
+  /** Pauses the Points animation cycle */
+  private pausePointAnim() {
+    this.points.forEach(point => {
+      point.anim.pause();
+    });
+  }
+  /** Pauses or Plays the canvas animation based on the provided value.
+   * @param value represents play if true and pause if false.
+   */
+  public setIsCanvasAnim(value: boolean) {
+    this.isPlaying = value;
+    if (this.isPlaying) {
+      this.isAnimLoopPaused = false;
+      this.startPointAnim();
+    } else {
+      this.isAnimLoopPaused = true;
+      this.pausePointAnim();
     }
-  });
-}
-
-/**
- * Updates position (evely distributed) of points based on new Canvas size.
- */
-function updatePointsPos() {
-  points.forEach(point => {
-    (point.origX = point.origX * (canvas.width / canvasOrig.w)),
-      (point.origY = point.origY * (canvas.height / canvasOrig.h));
-  });
-  canvasOrig.w = canvas.width;
-  canvasOrig.h = canvas.height;
+  }
+  /** Updates position (evely distributed) of points based on new Canvas size. */
+  public updatePointsPos() {
+    this.points.forEach(point => {
+      (point.origX = point.origX * (this.canvas.width / this.canvasOrig.w)),
+        (point.origY = point.origY * (this.canvas.height / this.canvasOrig.h));
+    });
+    this.canvasOrig.w = this.canvas.width;
+    this.canvasOrig.h = this.canvas.height;
+  }
+  /** Resizes the canvas when the container changes size */
+  public resizeCanvas() {
+    this.canvas.width = this.canvas.parentNode.offsetWidth * this.dpi;
+    this.canvas.height = this.canvas.parentNode.offsetHeight * this.dpi;
+  }
 }
