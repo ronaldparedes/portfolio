@@ -18,24 +18,24 @@ export default class WebAnim {
   points: Point[] = [];
   isPlaying = true;
   isAnimLoopPaused = false;
-  canvasOrig;
+  canvasOrig = { w: null, h: null };
   constructor() {
     this.canvas.width =
       (<HTMLElement>this.canvas.parentNode).offsetWidth * this.dpi;
     this.canvas.height =
       (<HTMLElement>this.canvas.parentNode).offsetHeight * this.dpi;
-    this.setPoints(13);
     this.canvasOrig = { w: this.canvas.width, h: this.canvas.height };
+    this.setPoints(13);
   }
 
   /** Initializes the properties of each Point */
   private setPoints(maxPoint: number) {
+    const widthVal = this.canvas.width / maxPoint;
+    const heightVal = ((this.canvas.height - 53) / (maxPoint * 0.75)) * 0.9;
     for (let i = 0; i < maxPoint; i++) {
-      let x = i * (this.canvas.width / maxPoint) + this.canvas.width * 0.05;
+      let x = i * widthVal + this.canvas.width * 0.05;
       for (let j = 0; j < maxPoint * 0.75; j++) {
-        let y =
-          j * (((this.canvas.height - 53) / (maxPoint * 0.75)) * 0.9) +
-          this.canvas.height * 0.1;
+        let y = j * heightVal + this.canvas.height * 0.1;
         this.points.push({
           x: x,
           y: y,
@@ -57,8 +57,7 @@ export default class WebAnim {
    * @param point to be drawn on the canvas
    */
   private drawCircle(point: Point) {
-    const pointOpacity =
-      (point.y - this.canvas.height * 0.1) / this.canvas.height; //Opacity based on Y position
+    const pointOpacity = point.y / this.canvas.height; //Opacity based on Y position
     this.ctx.beginPath();
     this.ctx.arc(point.x, point.y, point.size, 0, 2 * Math.PI, false);
     this.ctx.fillStyle = `rgba(255, 255, 255,
@@ -72,21 +71,23 @@ export default class WebAnim {
    * @param distVal variable num to affect number of connections
    */
   private drawLines(point: Point, distVal: number, lineWidth: number) {
+    // MaxDist based on canvas aspect ratio
+    const widthVal = this.canvas.width / distVal;
+    const heightVal = this.canvas.height / distVal;
+    const maxDist: number = widthVal > heightVal ? widthVal : heightVal;
+    const heightOpacity =
+      (point.y + this.canvas.height * 0.1) / this.canvas.height;
     this.points.forEach(nextPoint => {
       const distance = this.getDistance(point, nextPoint);
-      // MaxDist based on canvas aspect ratio
-      const widthVal = this.canvas.width / distVal;
-      const heightVal = this.canvas.height / distVal;
-      const maxDist: number = widthVal > heightVal ? widthVal : heightVal;
       // Draws lines to points closer that maxDist
       if (point != nextPoint && distance < maxDist) {
+        const lineOpacity =
+          ((maxDist - distance) / (maxDist * 3)) * heightOpacity;
         this.ctx.beginPath();
         this.ctx.moveTo(point.x, point.y);
         this.ctx.lineTo(nextPoint.x, nextPoint.y);
         this.ctx.lineWidth = lineWidth;
-        this.ctx.strokeStyle = `rgba(255, 255, 255,${((maxDist - distance) /
-          (maxDist * 3)) *
-          ((point.y + this.canvas.height * 0.1) / this.canvas.height)})`; // To Set opacity based on Height
+        this.ctx.strokeStyle = `rgba(255, 255, 255,${lineOpacity})`;
         this.ctx.stroke();
       }
     });
@@ -156,16 +157,20 @@ export default class WebAnim {
   }
   /** Updates position (evely distributed) of points based on new Canvas size. */
   public updatePointsPos() {
+    const widthVal = this.canvas.width / this.canvasOrig.w;
+    const heightVal = this.canvas.height / this.canvasOrig.h;
     this.points.forEach(point => {
-      (point.origX = point.origX * (this.canvas.width / this.canvasOrig.w)),
-        (point.origY = point.origY * (this.canvas.height / this.canvasOrig.h));
+      (point.origX = point.origX * widthVal),
+        (point.origY = point.origY * heightVal);
     });
     this.canvasOrig.w = this.canvas.width;
     this.canvasOrig.h = this.canvas.height;
   }
   /** Resizes the canvas when the container changes size */
   public resizeCanvas() {
-    this.canvas.width = this.canvas.parentNode.offsetWidth * this.dpi;
-    this.canvas.height = this.canvas.parentNode.offsetHeight * this.dpi;
+    this.canvas.width =
+      (<HTMLElement>this.canvas.parentNode).offsetWidth * this.dpi;
+    this.canvas.height =
+      (<HTMLElement>this.canvas.parentNode).offsetHeight * this.dpi;
   }
 }
