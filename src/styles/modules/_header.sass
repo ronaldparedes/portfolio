@@ -32,7 +32,7 @@ section
         display: inline-block
       .greeting
         // border: 1px solid green
-        animation: intro 3s ease-out
+        animation: intro 2s ease-out
       .sentence
         // border: 1px solid pink
         overflow: hidden
@@ -98,6 +98,13 @@ section
     opacity: 0
   100%
     opacity: 1
+@keyframes canvas-intro
+  0%
+    opacity: 0
+  90%
+    opacity: 0.3
+  100%
+    opacity: .9
 
 nav
   position: absolute
@@ -152,6 +159,10 @@ nav
     width: 50px
     // background-color: transparentize(#4b93b1, .8 )
     background: none
+    &:hover
+      cursor: pointer
+      .ham, .ham::before, .ham::after
+        background-color: $highlight
   .ham, .ham::before, .ham::after
     background-color: #ffff
     border-radius: 1px
@@ -209,4 +220,4 @@ canvas
   position: absolute
   top: 0
   z-index: 0
-  animation: intro 3s
+  animation: canvas-intro 6s ease-out forwards
