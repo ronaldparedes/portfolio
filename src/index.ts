@@ -6,9 +6,8 @@ function AnimLoop() {
   window.requestAnimationFrame(AnimLoop);
 }
 webAnim.startPointAnim();
-setTimeout(() => {
-  window.requestAnimationFrame(AnimLoop);
-}, 100);
+
+window.requestAnimationFrame(AnimLoop);
 
 if (
   /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
@@ -190,4 +189,26 @@ sections.forEach(section => {
       offset: "-40%"
     })
   );
+});
+
+/** Form functionality */
+
+/* Clear Button */
+const clearBtn = document.querySelectorAll(".clear");
+clearBtn.forEach(btn => {
+  btn.addEventListener("click", event => {
+    event.currentTarget.parentNode.childNodes[1].value = "";
+    event.currentTarget.parentNode.childNodes[1].focus();
+  });
+});
+/* Submit Button */
+const submitBtn = document.querySelector(".submit-button");
+submitBtn.addEventListener("submit", event => {
+  if (!event.target.classList.contains("validate")) {
+    console.log(event.target.classList);
+    return;
+  }
+
+  // Prevent form from submitting
+  event.preventDefault();
 });

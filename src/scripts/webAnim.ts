@@ -25,16 +25,17 @@ export default class WebAnim {
     this.canvas.height =
       (<HTMLElement>this.canvas.parentNode).offsetHeight * this.dpi;
     this.canvasOrig = { w: this.canvas.width, h: this.canvas.height };
-    this.setPoints(13);
+    this.setPoints(11);
   }
 
   /** Initializes the properties of each Point */
   private setPoints(maxPoint: number) {
     const widthVal = this.canvas.width / maxPoint;
     const heightVal = ((this.canvas.height - 53) / (maxPoint * 0.75)) * 0.9;
+    const maxPointY = maxPoint * 0.75;
     for (let i = 0; i < maxPoint; i++) {
       let x = i * widthVal + this.canvas.width * 0.05;
-      for (let j = 0; j < maxPoint * 0.75; j++) {
+      for (let j = 0; j < maxPointY; j++) {
         let y = j * heightVal + this.canvas.height * 0.1;
         this.points.push({
           x: x,

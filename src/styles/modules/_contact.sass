@@ -3,3 +3,102 @@
   color: $primary
   font-size: initial
   height: 800px
+  form
+    // margin: 0
+    // border: 1px solid red
+    display: flex
+    flex-direction: column
+    justify-content: space-around
+    // background-color: rgb(61, 61, 61)
+    height: 500px
+    .input-cont
+      // border: 1px solid pink
+      position: relative
+      input, textarea
+        height: 44px
+        font-size: 1.6rem
+        appearance: none
+        outline: none
+        color: $primary
+        width: 300px
+        border: 1px solid rgb(84, 84, 84)
+        border-radius: 4px
+        background-color: transparent
+        padding-left: 40px
+        padding-right: 25px
+        &:invalid ~ label
+          top: calc( 50% - 9px )
+        &:focus , &:valid
+          border-color: $highlight
+        &:focus ~ label, &:valid ~ label
+          color: $highlight
+          font-size: 1.4rem
+          top: -8px
+        &:focus ~ .icon-cont, &:valid ~ .icon-cont
+          .icon
+            fill: $highlight
+            width: 22px
+        &:valid:focus ~ .clear
+          svg
+            opacity: 1
+      textarea
+        height: initial
+        resize: none
+        padding-top: 2rem
+        &:invalid ~ label
+          top: 9px
+        &:focus ~ label, &:valid ~ label
+          top: -8px
+        & + .icon-cont
+          top: 0%
+          transform: translateY(25%)
+        & ~ .clear
+          top: 0
+          transform: translateY(50%)
+      label
+        color: grey
+        background-color: $offWhite
+        position: absolute
+        left: 36px
+        transition: all 200ms ease-in
+        transition-property: top, font-size
+      .icon-cont
+        // border: 1px solid green
+        position: absolute
+        left: 8px
+        top: 50%
+        transform: translateY(-50%)
+        .icon
+          fill: grey
+          transition: all 200ms ease-in
+          transition-property: width, fill
+      .clear
+        fill: darkred
+        position: absolute
+        right: 2%
+        top: 50%
+        transform: translateY(-50%)
+        svg
+          opacity: 0
+          width: 20px
+          cursor: pointer
+          transition: all 200ms ease-in
+          transition-property: width, opacity, fill
+        &:hover
+          svg
+            width: 22px
+            fill: lighten(darkred, 10%)
+    .submit-button
+      color: $offWhite
+      outline: none
+      border: none
+      cursor: pointer
+      display: flex
+      justify-content: center
+      align-items: center
+      border-radius: 10px
+      background-color: darken($highlight, 10% )
+      width: 80px
+      height: 40px
+      &:hover
+        background-color: $highlight
