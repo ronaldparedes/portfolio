@@ -5,9 +5,15 @@ function AnimLoop() {
   webAnim.step();
   window.requestAnimationFrame(AnimLoop);
 }
-webAnim.startPointAnim();
+//Initial drawCanvas call (No animation)
+webAnim.step();
 
-window.requestAnimationFrame(AnimLoop);
+// Wait until Text intro completes
+setTimeout(() => {
+  //Begin animation
+  webAnim.startPointAnim();
+  window.requestAnimationFrame(AnimLoop);
+}, 5500);
 
 if (
   /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
@@ -127,7 +133,8 @@ function shouldToggleMenuFunc(shouldToggleMenu: boolean) {
 const navLinks = document.querySelector(".link-wrap");
 navLinks.childNodes.forEach(link => {
   let linkName = link.textContent.toLowerCase();
-  let offsetY = linkName == "about" ? 53 : 0;
+  // let offsetY = linkName == "about" ? 53 : 0
+  let offsetY = 53;
   link.addEventListener("click", () =>
     scrollToSection(
       document.querySelector(`.${linkName}-wrap`),

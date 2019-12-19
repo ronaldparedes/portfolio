@@ -1,8 +1,13 @@
+section.flex
+  justify-content: flex-start
+
 .contact-wrap
   background-color: $offWhite
   color: $primary
   font-size: initial
   height: 800px
+  h2
+    // margin: 50px 0
   form
     // margin: 0
     // border: 1px solid red
@@ -29,14 +34,15 @@
         &:invalid ~ label
           top: calc( 50% - 9px )
         &:focus , &:valid
-          border-color: $highlight
+          // border-color: $highlight
+          border-color: $blue
         &:focus ~ label, &:valid ~ label
-          color: $highlight
+          color: $blue
           font-size: 1.4rem
           top: -8px
         &:focus ~ .icon-cont, &:valid ~ .icon-cont
           .icon
-            fill: $highlight
+            fill: $blue
             width: 22px
         &:valid:focus ~ .clear
           svg
@@ -57,6 +63,7 @@
           transform: translateY(50%)
       label
         color: grey
+        pointer-events: none
         background-color: $offWhite
         position: absolute
         left: 36px
@@ -65,6 +72,7 @@
       .icon-cont
         // border: 1px solid green
         position: absolute
+        pointer-events: none
         left: 8px
         top: 50%
         transform: translateY(-50%)

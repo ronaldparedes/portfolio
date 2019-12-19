@@ -33,13 +33,14 @@ export default class WebAnim {
     const widthVal = this.canvas.width / maxPoint;
     const heightVal = ((this.canvas.height - 53) / (maxPoint * 0.75)) * 0.9;
     const maxPointY = maxPoint * 0.75;
+    const change = 50;
     for (let i = 0; i < maxPoint; i++) {
       let x = i * widthVal + this.canvas.width * 0.05;
       for (let j = 0; j < maxPointY; j++) {
         let y = j * heightVal + this.canvas.height * 0.1;
         this.points.push({
-          x: x,
-          y: y,
+          x: randomBetween(x - change, x + change),
+          y: randomBetween(y - change, y + change),
           origX: x,
           origY: y,
           size: randomBetween(2, 5),

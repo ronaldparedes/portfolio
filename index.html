@@ -110,9 +110,15 @@
     </section>
     <section class="contact-wrap flex">
       <h2>Contact</h2>
-      <form>
+      <form action="https://formspree.io/xvozgrbo" method="POST">
         <div class="input-cont">
-          <input type="text" id="name" minlength="1" maxlength="30" required />
+          <input
+            type="text"
+            name="name"
+            minlength="1"
+            maxlength="30"
+            required
+          />
           <div class="icon-cont">
             <svg class="icon" width="24" viewBox="0 0 24 24">
               <path
@@ -133,7 +139,7 @@
         <div class="input-cont">
           <input
             type="email"
-            id="email"
+            name="email"
             minlength="1"
             maxlength="50"
             required
@@ -158,7 +164,7 @@
         <div class="input-cont">
           <input
             type="text"
-            id="subject"
+            name="subject"
             minlength="1"
             maxlength="50"
             required
@@ -182,13 +188,7 @@
           </div>
         </div>
         <div class="input-cont">
-          <textarea
-            name=""
-            id="message"
-            cols="30"
-            rows="10"
-            required
-          ></textarea>
+          <textarea name="message" cols="30" rows="10" required></textarea>
           <div class="icon-cont">
             <svg class="icon" width="24" viewBox="0 0 24 24">
               <path fill="none" d="M0 0h24v24H0V0z" />
