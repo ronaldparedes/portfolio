@@ -2,22 +2,15 @@ section.flex
   justify-content: flex-start
 
 .contact-wrap
-  background-color: $offWhite
+  background-color: $terciary
   color: $primary
   font-size: initial
-  height: 800px
-  h2
-    // margin: 50px 0
   form
-    // margin: 0
-    // border: 1px solid red
     display: flex
     flex-direction: column
     justify-content: space-around
-    // background-color: rgb(61, 61, 61)
     height: 500px
     .input-cont
-      // border: 1px solid pink
       position: relative
       input, textarea
         height: 44px
@@ -34,15 +27,14 @@ section.flex
         &:invalid ~ label
           top: calc( 50% - 9px )
         &:focus , &:valid
-          // border-color: $highlight
-          border-color: $blue
+          border-color: $primary
         &:focus ~ label, &:valid ~ label
-          color: $blue
+          color: $primary
           font-size: 1.4rem
           top: -8px
         &:focus ~ .icon-cont, &:valid ~ .icon-cont
           .icon
-            fill: $blue
+            fill: $primary
             width: 22px
         &:valid:focus ~ .clear
           svg
@@ -62,15 +54,15 @@ section.flex
           top: 0
           transform: translateY(50%)
       label
-        color: grey
+        color: #636465
         pointer-events: none
-        background-color: $offWhite
+        background-color: $terciary
         position: absolute
         left: 36px
-        transition: all 200ms ease-in
         transition-property: top, font-size
+        transition-duration: 200ms
+        transition-timing-function: ease-in
       .icon-cont
-        // border: 1px solid green
         position: absolute
         pointer-events: none
         left: 8px
@@ -78,8 +70,9 @@ section.flex
         transform: translateY(-50%)
         .icon
           fill: grey
-          transition: all 200ms ease-in
           transition-property: width, fill
+          transition-duration: 200ms
+          transition-timing-function: ease-in
       .clear
         fill: darkred
         position: absolute
@@ -90,14 +83,15 @@ section.flex
           opacity: 0
           width: 20px
           cursor: pointer
-          transition: all 200ms ease-in
           transition-property: width, opacity, fill
+          transition-duration: 200ms
+          transition-timing-function: ease-in
         &:hover
           svg
             width: 22px
             fill: lighten(darkred, 10%)
     .submit-button
-      color: $offWhite
+      color: $terciary
       outline: none
       border: none
       cursor: pointer
@@ -108,5 +102,7 @@ section.flex
       background-color: darken($highlight, 10% )
       width: 80px
       height: 40px
+      transition: background-color 200ms ease-in-out, color 200ms ease-in-out
       &:hover
         background-color: $highlight
+        color: $primary

@@ -1,5 +1,7 @@
+*
+  box-sizing: border-box
 html
-  font-size: 62.5%
+  font-size: 62.5% // To allow REM to map to pix
   font-family: "helvetica"
 
 body
@@ -12,13 +14,48 @@ body
   justify-content: center
   align-items: center
 
+.main-wrap
+  position: relative
+  .defs-only
+    position: absolute
+    height: 0
+    width: 0
+    overflow: none
+    left: -100%
 section.flex
+  padding: 0 16px 0px 16px
   justify-content: space-around
   &.home-wrap
     justify-content: center
+  h2
+    position: relative
+    width: 100%
+    font-size: 3rem
+    margin-bottom: 4rem
 
-@media screen and (min-width: 1080px)
+@media screen and (min-width: 600px)
+  .main-wrap
+    position: relative
+    h2
+      &::before, &::after
+        position: absolute
+        content: ""
+        top: 50%
+        border-top: 2px solid transparentize($primary, .5)
+        border-radius: 2px
+        width: 30%
+      &::before
+        left: 0
+      &::after
+        right: 0
+    section
+      padding: 40px 24px 60px 24px
+  @media screen and (min-width: 900px) //720px
+    .main-wrap
+      section, nav
+        padding-left: calc(calc(100% - 840px) /2) //680px
+        padding-right: calc(calc(100% - 840px) /2)//680px
+@media screen and (min-width: 1060px)
   body
-    width: 1080px
     margin-left: auto
     margin-right: auto

@@ -1,6 +1,37 @@
 footer
-  padding: 70 0 50 0
+  padding: 40px 0 40px 0
   background-color: $primary
-  color: darken($terciary, 40)
-  font-size: 1.4rem
-  text-transform: uppercase
+  // color: darken($terciary, 40)
+  color: darken($terciary, 10)
+  .social
+    display: flex
+    justify-content: center
+    padding: 0
+    margin: 0 0 20px 0
+    .btn
+      position: relative
+      font-size: 0
+      background-color: $offWhite
+      width: 30px
+      height: 30px
+      margin: 0 10px 0 10px
+      transition: background-color 200ms ease-in-out, transform 200ms ease-in-out
+      &:hover
+        background-color: $highlight
+        transform: scale(1.2)
+      &.github
+        mask: url(../assets/githubLogo.svg)0 0/30px 30px
+      &.linkedin
+        mask: url(../assets/linkedinLogo.svg)0 0/30px 30px
+      &.twitter
+        mask: url(../assets/twitterLogo.svg)0 0/30px 30px
+      a
+        display: inline-block
+        position: absolute
+        top: 0
+        left: 0
+        width: 100%
+        height: 100%
+  .copyright
+    font-size: 1.4rem
+    text-transform: uppercase

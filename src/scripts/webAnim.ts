@@ -1,3 +1,4 @@
+import gsap from "gsap";
 import { randomBetween, randomFloatBetween } from "./util";
 
 interface Point {
@@ -140,6 +141,7 @@ export default class WebAnim {
 
   /** Pauses the Points animation cycle */
   private pausePointAnim() {
+    // debugger;
     this.points.forEach(point => {
       point.anim.pause();
     });
@@ -149,13 +151,19 @@ export default class WebAnim {
    */
   public setIsCanvasAnim(value: boolean) {
     this.isPlaying = value;
-    if (this.isPlaying) {
+    if (this.isPlaying && this.isAnimLoopPaused) {
       this.isAnimLoopPaused = false;
       this.startPointAnim();
     } else {
-      this.isAnimLoopPaused = true;
-      this.pausePointAnim();
+      if (!this.isAnimLoopPaused) {
+        this.isAnimLoopPaused = true;
+        this.pausePointAnim();
+      }
     }
+  }
+
+  public getIsAnimLoopPaused(): boolean {
+    return this.isAnimLoopPaused;
   }
   /** Updates position (evely distributed) of points based on new Canvas size. */
   public updatePointsPos() {
