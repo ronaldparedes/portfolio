@@ -7,7 +7,7 @@
     "start": "parcel index.html --open",
     "build": "parcel build index.html",
     "predeploy": "rm -rf dist && parcel build index.html",
-    "deploy": "gh-pages -b master -d build"
+    "deploy": "gh-pages -b master -d dist --remote live"
   },
   "dependencies": {
     "@types/node": "^13.7.1",
