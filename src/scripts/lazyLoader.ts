@@ -13,6 +13,8 @@ export default class LazyLoader {
     require("../assets/tangram.png");
     require("../assets/cacho.jpg");
     require("../assets/cacho.mp4");
+    require("../assets/website.jpg");
+    require("../assets/website.mp4");
 
     if ("IntersectionObserver" in window) {
       const lazyMediaObserver = new IntersectionObserver(
