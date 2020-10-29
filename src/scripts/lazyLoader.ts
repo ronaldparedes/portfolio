@@ -15,11 +15,13 @@ export default class LazyLoader {
     require("../assets/cacho.mp4");
     require("../assets/website.jpg");
     require("../assets/website.mp4");
+    require("../assets/optimal1.jpg");
+    require("../assets/optimal.mp4");
 
     if ("IntersectionObserver" in window) {
       const lazyMediaObserver = new IntersectionObserver(
         (entries, observer) => {
-          entries.forEach(mediaItem => {
+          entries.forEach((mediaItem) => {
             if (mediaItem.isIntersecting) {
               (mediaItem.target as HTMLVideoElement).src = require(`../assets/${
                 (mediaItem.target as HTMLVideoElement).dataset.src
@@ -30,7 +32,7 @@ export default class LazyLoader {
           });
         }
       );
-      this.lazyMedia.forEach(lazyItem => {
+      this.lazyMedia.forEach((lazyItem) => {
         lazyMediaObserver.observe(lazyItem);
       });
     } else {
