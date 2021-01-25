@@ -5,9 +5,11 @@ import Navigation from "./scripts/navigation";
 import LazyLoader from "./scripts/lazyLoader";
 import ProjectCard from "./scripts/projectCard";
 import FormProcessor from "./scripts/formProcessor";
+import customCursor from "./scripts/customCursor";
 
 const webAnim = new WebAnim();
 animInit();
+customCursor();
 const navHighlighter = new NavHighlighter();
 navHighlighter.init();
 const formProcessor = new FormProcessor();

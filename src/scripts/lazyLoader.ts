@@ -17,6 +17,8 @@ export default class LazyLoader {
     require("../assets/website.mp4");
     require("../assets/optimal1.jpg");
     require("../assets/optimal.mp4");
+    require("../assets/d3-projects.png");
+    require("../assets/d3-projects.mp4");
 
     if ("IntersectionObserver" in window) {
       const lazyMediaObserver = new IntersectionObserver(

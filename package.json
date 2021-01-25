@@ -10,16 +10,16 @@
     "deploy": "gh-pages -b master -d dist --remote live"
   },
   "dependencies": {
-    "@types/node": "^13.7.1",
-    "gsap": "^3.1.1",
+    "@types/node": "^13.13.40",
+    "gsap": "^3.6.0",
     "waypoints": "^4.0.1"
   },
   "devDependencies": {
-    "parcel-bundler": "^1.6.1",
+    "autoprefixer": "^9.8.6",
     "gh-pages": "^2.2.0",
-    "sass": "^1.23.6",
-    "typescript": "^3.7.2",
-    "autoprefixer": "^9.7.3",
-    "postcss-modules": "^1.4.1"
+    "parcel-bundler": "^1.6.1",
+    "postcss-modules": "^1.5.0",
+    "sass": "^1.32.5",
+    "typescript": "^3.9.7"
   }
 }
